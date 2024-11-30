@@ -2,10 +2,13 @@
 #include <iostream>
 using namespace std;
 
+bool createDB();
+bool createTable();
 
 sqlite3 *db;
 
 int main() {
+
 
     if (createDB()) {
         cout << "Successfully created a database";
@@ -20,7 +23,7 @@ int main() {
 }
 
 bool createDB() {
-    int res = sqlite3_open("test.db", &db);
+    int res = sqlite3_open("Library.db", &db);
 
     if (res != SQLITE_OK) {
         cout << "Error in creating DB: " << sqlite3_errmsg(db) << endl;
