@@ -34,7 +34,7 @@ bool createDB() {
         return true;
     }
 }
-
+    
 bool createTable() {
     char *err;
 
