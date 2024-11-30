@@ -7,15 +7,33 @@ sqlite3 *db;
 
 int main() {
 
+    if (createDB()) {
+        cout << "Successfully created a database";
+    }
+
+    if (createTable()) {
+        cout << "Successfully created a table";
+    }
+
+    sqlite3_close(db);
+    return 0;
+}
+
+bool createDB() {
     int res = sqlite3_open("test.db", &db);
 
     if (res != SQLITE_OK) {
         cout << "Error in creating DB: " << sqlite3_errmsg(db) << endl;
-        return 1;
+        return false;
     }
     else {
         cout << "Database File creation successful." << endl;
+        return true;
     }
+}
+
+bool createTable() {
+    char *err;
 
     // Creates a table for book
     string sql = "CREATE TABLE IF NOT EXISTS BOOK ("
@@ -26,7 +44,15 @@ int main() {
         "publicationDATE TEXT NOT NULL,"
         "availableCopies INT NOT NULL);";
 
-    sqlite3_close(db);
-    return 0;
-}
+    int res = sqlite3_exec(db, sql.c_str(), NULL, 0, &err);
 
+    if (res != SQLITE_OK) {
+        cout << "Error in creating table: " << err << endl;
+        sqlite3_free(err);
+        return false;
+    }
+    else {
+        cout << "Table created successfully." << endl;
+        return true;
+    }
+}
