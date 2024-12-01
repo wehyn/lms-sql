@@ -81,7 +81,6 @@ public:
             "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
             "TITLE TEXT NOT NULL, "
             "AUTHOR TEXT NOT NULL,"
-            "ISBN TEXT NOT NULL UNIQUE, "
             "publicationDATE TEXT NOT NULL,"
             "availableCopies INT NOT NULL);";
 
@@ -100,6 +99,7 @@ public:
             "MEMBER_ID INTEGER, "
             "BOOK_ISBN TEXT, "
             "BORROW_DATE TEXT, "
+            "RETURN_DATE TEXT,"
             "FOREIGN KEY(MEMBER_ID) REFERENCES MEMBER(ID), "
             "FOREIGN KEY(BOOK_ISBN) REFERENCES BOOK(ISBN));";
 
@@ -129,11 +129,11 @@ public:
     }
 
     bool addBook(const string& title, const string& author, 
-                 const string& isbn, const string& publicationDate, 
+                const string& publicationDate, 
                  int availableCopies) {
         sqlite3_stmt* stmt;
-        const char* sql = "INSERT INTO BOOK (TITLE, AUTHOR, ISBN, publicationDATE, availableCopies) "
-                          "VALUES (?, ?, ?, ?, ?);";
+        const char* sql = "INSERT INTO BOOK (TITLE, AUTHOR, publicationDATE, availableCopies) "
+                          "VALUES (?, ?, ?, ?);";
         
         int rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
         if (rc != SQLITE_OK) {
@@ -144,7 +144,6 @@ public:
         // Bind values to prepared statement
         sqlite3_bind_text(stmt, 1, title.c_str(), -1, SQLITE_STATIC);
         sqlite3_bind_text(stmt, 2, author.c_str(), -1, SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 3, isbn.c_str(), -1, SQLITE_STATIC);
         sqlite3_bind_text(stmt, 4, publicationDate.c_str(), -1, SQLITE_STATIC);
         sqlite3_bind_int(stmt, 5, availableCopies);
 
@@ -164,7 +163,7 @@ public:
     // Remove a book by ISBN (with prepared statement)
     bool removeBook(const string& isbn) {
         sqlite3_stmt* stmt;
-        const char* sql = "DELETE FROM BOOK WHERE ISBN = ?;";
+        const char* sql = "DELETE FROM BOOK WHERE ID = ?;";
         
         int rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
         if (rc != SQLITE_OK) {
@@ -192,7 +191,7 @@ public:
         int bookId = -1, memberId = -1;
 
         // Find book ID
-        const char* findBookSql = "SELECT ID, availableCopies FROM BOOK WHERE ISBN = ?;";
+        const char* findBookSql = "SELECT ID, availableCopies FROM BOOK WHERE ID = ?;";
         sqlite3_stmt* findBookStmt;
         int rc = sqlite3_prepare_v2(db, findBookSql, -1, &findBookStmt, NULL);
         sqlite3_bind_text(findBookStmt, 1, isbn.c_str(), -1, SQLITE_STATIC);
@@ -479,7 +478,7 @@ public:
         }
 
         // If author exists, add the book
-        return addBook(title, authorName, isbn, publicationDate, availableCopies);
+        return addBook(title, authorName, publicationDate, availableCopies);
     }
 
     // Add a member
@@ -569,7 +568,7 @@ public:
                             getline(cin, publicationDate);
                             cout << "Enter Available Copies: ";
                             cin >> availableCopies;
-                            addBook(title, author, isbn, publicationDate, availableCopies);
+                            addBook(title, author, publicationDate, availableCopies);
                             break;
                         case 2:
                             cout << "Enter ID to remove: ";
