@@ -144,8 +144,8 @@ public:
         // Bind values to prepared statement
         sqlite3_bind_text(stmt, 1, title.c_str(), -1, SQLITE_STATIC);
         sqlite3_bind_text(stmt, 2, author.c_str(), -1, SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 4, publicationDate.c_str(), -1, SQLITE_STATIC);
-        sqlite3_bind_int(stmt, 5, availableCopies);
+        sqlite3_bind_text(stmt, 3, publicationDate.c_str(), -1, SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 4, availableCopies);
 
         // Execute the statement
         rc = sqlite3_step(stmt);
@@ -581,7 +581,7 @@ public:
                         case 4: {
                             string memberID, isbn;
                             cout << "Enter Member ID: ";
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+                            cin.ignore(); // Clear the input buffer
                             getline(cin, memberID);
                             cout << "Enter ID of book to borrow: ";
                             getline(cin, isbn);
@@ -591,7 +591,7 @@ public:
                         case 5: {
                             string memberID, isbn;
                             cout << "Enter Member ID: ";
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+                            cin.ignore(); // Clear the input buffer
                             getline(cin, memberID);
                             cout << "Enter ID of book to return: ";
                             getline(cin, isbn);
@@ -613,7 +613,7 @@ public:
                     switch(authorChoice) {
                         case 1:
                             cout << "Enter Author Name: ";
-                             cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+                             cin.ignore(); // Clear the input buffer
                             getline(cin, name);
                             cout << "Enter Author Books:";
                             getline(cin, biography);
@@ -639,7 +639,7 @@ public:
                     switch (memberChoice) {
                         case 1:
                             cout << "Enter Member Name: ";
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+                            cin.ignore(); // Clear the input buffer
                             getline(cin, name);
                             cout << "Enter Contact Info (optional): ";
                             getline(cin, contactInfo);
@@ -651,7 +651,7 @@ public:
                         case 3: {
                             string id;
                             cout << "Enter Member ID to remove: ";
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+                            cin.ignore(); // Clear the input buffer
                             getline(cin, id);
                             removeMember(id);
                             break;

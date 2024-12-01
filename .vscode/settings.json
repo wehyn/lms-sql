@@ -1,7 +1,8 @@
 {
-    "files.associations": {
-        "ostream": "cpp",
-        "iostream": "cpp",
-        "istream": "cpp"
-    }
+  "files.associations": {
+    "ostream": "cpp",
+    "iostream": "cpp",
+    "istream": "cpp",
+    "limits": "cpp"
+  }
 }
